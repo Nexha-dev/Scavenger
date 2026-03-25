@@ -1700,14 +1700,9 @@ impl ScavengerContract {
         to: Address,
         latitude: i128,
         longitude: i128,
-    ) -> WasteTransfer {
-        // Access control check - verify caller owns the waste
-        Self::require_not_paused(&env);
-        Self::only_waste_owner(&env, &from, waste_id);
-        Self::require_registered(&env, &from);
-        Self::require_registered(&env, &to);
     ) -> Result<WasteTransfer, Error> {
         from.require_auth();
+        Self::require_not_paused(&env);
 
         // Fetch waste first so we can return a typed error if not found
         let mut waste: types::Waste = match env
